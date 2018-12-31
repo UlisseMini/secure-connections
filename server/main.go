@@ -14,7 +14,7 @@ import (
 func main() {
 	server := getServer("../ca/minica.pem")
 	http.HandleFunc("/", indexHandler)
-	must(server.ListenAndServeTLS("", ""))
+	mustNot(server.ListenAndServeTLS("", ""))
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
@@ -47,7 +47,7 @@ func getServer(pemFile string) (*http.Server, error) {
 	}
 }
 
-func must(err error) {
+func mustNot(err error) {
 	if err != nil {
 		fmt.Printf("Server error: %v\n", err)
 		os.Exit(1)
@@ -56,11 +56,11 @@ func must(err error) {
 
 // cert := "cert"
 // fmt.Println("My certificate:")
-// must(utils.OutputPEMFile(cert))
+// mustNot(utils.OutputPEMFile(cert))
 // c, _ = tls.LoadX509KeyPair(cert, "key")
 
 // fmt.Println("Certificate authority:")
-// must(utils.OutputPEMFile("../ca/cert"))
+// mustNot(utils.OutputPEMFile("../ca/cert"))
 // cp, _ := x509.SystemCertPool()
 // data, _ := ioutil.ReadFile("../ca/cert")
 // cp.AppendCertsFromPEM(data)
