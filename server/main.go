@@ -13,11 +13,11 @@ import (
 
 func main() {
 	server := getServer()
-	http.HandleFunc("/", myHandler)
+	http.HandleFunc("/", indexHandler)
 	must(server.ListenAndServeTLS("", ""))
 }
 
-func myHandler(w http.ResponseWriter, r *http.Request) {
+func indexHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Handling request")
 	w.Write([]byte("Hey GopherCon!"))
 }
