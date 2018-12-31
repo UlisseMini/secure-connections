@@ -41,11 +41,10 @@ func getServer(pemFile string) (*http.Server, error) {
 		VerifyPeerCertificate: utils.CertificateChains,
 	}
 
-	server := &http.Server{
+	return &http.Server{
 		Addr:      ":8080",
 		TLSConfig: tlsconf,
 	}
-	return server
 }
 
 func must(err error) {
