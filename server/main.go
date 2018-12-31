@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	server := getServer()
+	server := getServer("../ca/minica.pem")
 	http.HandleFunc("/", indexHandler)
 	must(server.ListenAndServeTLS("", ""))
 }
@@ -22,14 +22,18 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Hey GopherCon!"))
 }
 
-func getServer() *http.Server {
+func getServer(pemFile string) (*http.Server, error) {
 	cp := x509.NewCertPool()
-	data, _ := ioutil.ReadFile("../ca/minica.pem")
+	data, err := ioutil.ReadFile(pemFile)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read %q: %v", pemFile, err)
+	}
+
 	cp.AppendCertsFromPEM(data)
 
 	// c, _ := tls.LoadX509KeyPair("cert.pem", "key.pem")
 
-	tls := &tls.Config{
+	tlsconf := &tls.Config{
 		// Certificates:          []tls.Certificate{c},
 		ClientCAs:             cp,
 		ClientAuth:            tls.RequireAndVerifyClientCert,
@@ -39,7 +43,7 @@ func getServer() *http.Server {
 
 	server := &http.Server{
 		Addr:      ":8080",
-		TLSConfig: tls,
+		TLSConfig: tlsconf,
 	}
 	return server
 }
